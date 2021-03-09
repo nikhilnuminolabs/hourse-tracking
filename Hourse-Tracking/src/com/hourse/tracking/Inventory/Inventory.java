@@ -1,9 +1,11 @@
 package com.hourse.tracking.Inventory;
-
-import static com.hourse.tracking.constant.Constant.MAXSTOCK;
-
+import static com.hourse.tracking.constant.Constant.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import com.hourse.tracking.model.Denomination;
 import com.hourse.tracking.model.Horse;
@@ -22,36 +24,108 @@ public class Inventory {
 
 	private void init() {
 
+		initializeHorseInventory();
+
+		restockDenominationInventory();
+
+	}
+
+	public void initializeHorseInventory() {
+
+		hourseInventory.put(1, new Horse(HORSE_NAME_1,5));
+		hourseInventory.put(2, new Horse(HORSE_NAME_2,10));
+		hourseInventory.put(3, new Horse(HORSE_NAME_3,9));
+		hourseInventory.put(4, new Horse(HORSE_NAME_4,4));
+		hourseInventory.put(5, new Horse(HORSE_NAME_5,3));
+		hourseInventory.put(6, new Horse(HORSE_NAME_6,5));
+		hourseInventory.put(7, new Horse(HORSE_NAME_7,6));
+
+	}
+
+	public void restockDenominationInventory() {
+
 		denominationInventory.put(new Denomination(1), MAXSTOCK);
 		denominationInventory.put(new Denomination(5), MAXSTOCK);
 		denominationInventory.put(new Denomination(10), MAXSTOCK);
 		denominationInventory.put(new Denomination(20), MAXSTOCK);
 		denominationInventory.put(new Denomination(100), MAXSTOCK);
-		
-		hourseInventory.put(1, new Horse("That Darn Gray Cat",5));
-		hourseInventory.put(2, new Horse("Fort Utopia",10));
-		hourseInventory.put(3, new Horse("Count Sheep",9));
-		hourseInventory.put(4, new Horse("Ms Traitour",4));
-		hourseInventory.put(5, new Horse("Real Princess",3));
-		hourseInventory.put(6, new Horse("Pa Kettle",5));
-		hourseInventory.put(7, new Horse("Gin Stinger",6));
-		
+
 	}
 
-	public Map<Denomination, Integer> getDenominationInventory() {
-		return denominationInventory;
+	public void displayHorseInventory(Integer wonHorseNumber) {
+
+		for (Entry<Integer, Horse> horseInventory : hourseInventory.entrySet()) {
+
+			System.out.println(horseInventory.getKey()
+					+","+horseInventory.getValue().getName()
+					+","+horseInventory.getValue().getOdds()
+					+","+(horseInventory.getKey()== wonHorseNumber ? "won":"lost"));
+		}
 	}
 
-	public void setDenominationInventory(Map<Denomination, Integer> denominationInventory) {
-		this.denominationInventory = denominationInventory;
-	}
+	public void displayDenominationInventory() {
 
-	public Map<Integer, Horse> getHourseInventory() {
-		return hourseInventory;
-	}
+		for (Map.Entry<Denomination ,Integer> denominaionInventory : denominationInventory.entrySet()) {
 
-	public void setHourseInventory(Map<Integer, Horse> hourseInventory) {
-		this.hourseInventory = hourseInventory;
+			System.out.println(denominaionInventory.getKey().toString()+","+denominaionInventory.getValue());
+		}
 	}
+	
+	public void payoutDispense(Integer horseNumber,Integer wonHorseNumber,Integer betAmount) {
 
+		Map<Denomination ,Integer> payoutDenomination = new TreeMap<Denomination, Integer>();		
+		Map<Denomination ,Integer> tempDenominationInventory = new TreeMap<Denomination, Integer>();
+		tempDenominationInventory.putAll(denominationInventory);
+
+		if(horseNumber == wonHorseNumber) {
+
+			Integer odds = hourseInventory.get(horseNumber).getOdds();
+			Integer payout = odds * betAmount;
+
+			List<Denomination> denominationList = new ArrayList<Denomination>(denominationInventory.keySet()); 
+
+			Collections.reverse(denominationList);
+
+			for(Denomination denomination : denominationList) {
+				Integer denominationStock = denominationInventory.get(denomination);
+				if(denominationStock > 0 && payout >= denomination.getValue()) {	
+					Integer denominationCount = payout/denomination.getValue();
+					if(denominationCount <= denominationStock) {
+						payout =  payout % denomination.getValue();
+					} else {						
+						denominationCount = denominationStock ;
+						payout = payout - denomination.getValue() * denominationCount;
+					}
+					payoutDenomination.put(denomination, denominationCount);
+					denominationInventory.put(denomination,denominationStock-denominationCount);
+				}
+			}
+
+			if(payout != 0) {
+				denominationInventory.clear();
+				denominationInventory.putAll(denominationInventory);
+				System.out.println(INSUFFICIENT_FUND+DENOMINATION_UNIT+(odds * betAmount));
+			} else {			
+				displayPayout(horseNumber,odds * betAmount,payoutDenomination);				
+			}
+
+		} else {
+			System.out.println(NO_PAYOUT+hourseInventory.get(horseNumber).getName());
+		}
+	}
+	
+	public Boolean isValidHorseNumber(Integer horseNumber) {
+
+     return hourseInventory.containsKey(horseNumber);    
+	}
+	
+	public void displayPayout(Integer horseNumber,Integer payout, Map<Denomination ,Integer> payoutDenomination ) {
+
+		System.out.println("Payout:"+horseNumber+","+payoutDenomination.keySet().iterator().next().getUnit()+payout);
+		System.out.println("Dispensing:");
+
+		for (Entry<Denomination ,Integer> denomination : payoutDenomination.entrySet()) {
+			System.out.println(denomination.getKey().toString()+","+denomination.getValue());
+		}
+	}
 }

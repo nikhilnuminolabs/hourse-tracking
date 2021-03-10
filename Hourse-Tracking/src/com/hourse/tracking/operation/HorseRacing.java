@@ -93,8 +93,6 @@ public class HorseRacing {
 		inventory.restockDenominationInventory();
 	}
 
-
-
 	public void errorMessage(String message, String input) {
 
 		System.out.println(message +":"+input);

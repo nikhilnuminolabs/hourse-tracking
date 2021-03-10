@@ -31,6 +31,8 @@ public class Inventory {
 
 		initializeDenominationInventory();
 
+		denominationList.addAll(denominationInventory.keySet());
+		Collections.reverse(denominationList);
 	}
 
 	private void initializeHorseInventory() {
@@ -53,8 +55,6 @@ public class Inventory {
 		denominationInventory.put(new Denomination(20), MAXSTOCK);
 		denominationInventory.put(new Denomination(100), MAXSTOCK);
 
-		denominationList.addAll(denominationInventory.keySet());
-		Collections.reverse(denominationList);
 	}
 	
 	public void restockDenominationInventory() {

@@ -47,7 +47,7 @@ public class HorseRacing {
 								Integer betAmount = Integer.parseInt(strArray[1]);
 								if(strArray[1].matches("\\d+")) {									
 								inventory.payoutDispense(horseNumer,wonHorseNumber, betAmount);
-								
+								} else {								
 									errorMessage(INVALID_BET,DENOMINATION_UNIT+betAmount.toString());
 								}
 							} else {

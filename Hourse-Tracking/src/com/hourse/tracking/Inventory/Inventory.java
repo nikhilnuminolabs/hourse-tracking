@@ -15,10 +15,13 @@ public class Inventory {
 	private Map<Denomination,Integer> denominationInventory;
 
 	private Map<Integer,Horse> hourseInventory;
+	
+	private List<Denomination> denominationList;
 
 	public Inventory() {
 		this.denominationInventory = new TreeMap<Denomination,Integer>();
 		this.hourseInventory = new TreeMap<Integer,Horse>();
+		this.denominationList =  new ArrayList<Denomination>();
 		init();
 	}
 
@@ -26,11 +29,11 @@ public class Inventory {
 
 		initializeHorseInventory();
 
-		restockDenominationInventory();
+		initializeDenominationInventory();
 
 	}
 
-	public void initializeHorseInventory() {
+	private void initializeHorseInventory() {
 
 		hourseInventory.put(1, new Horse(HORSE_NAME_1,5));
 		hourseInventory.put(2, new Horse(HORSE_NAME_2,10));
@@ -42,7 +45,7 @@ public class Inventory {
 
 	}
 
-	public void restockDenominationInventory() {
+	private void initializeDenominationInventory() {
 
 		denominationInventory.put(new Denomination(1), MAXSTOCK);
 		denominationInventory.put(new Denomination(5), MAXSTOCK);
@@ -50,6 +53,13 @@ public class Inventory {
 		denominationInventory.put(new Denomination(20), MAXSTOCK);
 		denominationInventory.put(new Denomination(100), MAXSTOCK);
 
+		denominationList.addAll(denominationInventory.keySet());
+		Collections.reverse(denominationList);
+	}
+	
+	public void restockDenominationInventory() {
+		
+		initializeDenominationInventory();
 	}
 
 	public void displayHorseInventory(Integer wonHorseNumber) {
@@ -82,28 +92,25 @@ public class Inventory {
 			Integer odds = hourseInventory.get(horseNumber).getOdds();
 			Integer payout = odds * betAmount;
 
-			List<Denomination> denominationList = new ArrayList<Denomination>(denominationInventory.keySet()); 
-
-			Collections.reverse(denominationList);
-
 			for(Denomination denomination : denominationList) {
 				Integer denominationStock = denominationInventory.get(denomination);
+				Integer denominationCount = 0;
 				if(denominationStock > 0 && payout >= denomination.getValue()) {	
-					Integer denominationCount = payout/denomination.getValue();
+					denominationCount = payout/denomination.getValue();
 					if(denominationCount <= denominationStock) {
 						payout =  payout % denomination.getValue();
 					} else {						
 						denominationCount = denominationStock ;
 						payout = payout - denomination.getValue() * denominationCount;
 					}
-					payoutDenomination.put(denomination, denominationCount);
 					denominationInventory.put(denomination,denominationStock-denominationCount);
 				}
+				payoutDenomination.put(denomination, denominationCount);
 			}
 
 			if(payout != 0) {
 				denominationInventory.clear();
-				denominationInventory.putAll(denominationInventory);
+				denominationInventory.putAll(tempDenominationInventory);
 				System.out.println(INSUFFICIENT_FUND+DENOMINATION_UNIT+(odds * betAmount));
 			} else {			
 				displayPayout(horseNumber,odds * betAmount,payoutDenomination);				

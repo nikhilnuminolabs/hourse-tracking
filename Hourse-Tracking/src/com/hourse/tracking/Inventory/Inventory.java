@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
-
 import com.hourse.tracking.model.Denomination;
 import com.hourse.tracking.model.Horse;
 
@@ -15,7 +14,7 @@ public class Inventory {
 	private Map<Denomination,Integer> denominationInventory;
 
 	private Map<Integer,Horse> hourseInventory;
-	
+
 	private List<Denomination> denominationList;
 
 	public Inventory() {
@@ -54,11 +53,11 @@ public class Inventory {
 		denominationInventory.put(new Denomination(10), MAXSTOCK);
 		denominationInventory.put(new Denomination(20), MAXSTOCK);
 		denominationInventory.put(new Denomination(100), MAXSTOCK);
-
-	}
-	
-	public void restockDenominationInventory() {
 		
+	}
+
+	public void restockDenominationInventory() {
+
 		initializeDenominationInventory();
 	}
 
@@ -80,7 +79,7 @@ public class Inventory {
 			System.out.println(denominaionInventory.getKey().toString()+","+denominaionInventory.getValue());
 		}
 	}
-	
+
 	public void payoutDispense(Integer horseNumber,Integer wonHorseNumber,Integer betAmount) {
 
 		Map<Denomination ,Integer> payoutDenomination = new TreeMap<Denomination, Integer>();		
@@ -120,12 +119,12 @@ public class Inventory {
 			System.out.println(NO_PAYOUT+hourseInventory.get(horseNumber).getName());
 		}
 	}
-	
+
 	public Boolean isValidHorseNumber(Integer horseNumber) {
 
-     return hourseInventory.containsKey(horseNumber);    
+		return hourseInventory.containsKey(horseNumber);    
 	}
-	
+
 	public void displayPayout(Integer horseNumber,Integer payout, Map<Denomination ,Integer> payoutDenomination ) {
 
 		System.out.println("Payout:"+horseNumber+","+payoutDenomination.keySet().iterator().next().getUnit()+payout);

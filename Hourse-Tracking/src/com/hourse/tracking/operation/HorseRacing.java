@@ -44,11 +44,11 @@ public class HorseRacing {
 
 							Integer horseNumer = Integer.parseInt(strArray[0]);
 							if(horseNumer > 0 && inventory.isValidHorseNumber(horseNumer)) {
-								Integer betAmount = Integer.parseInt(strArray[1]);
-								if(strArray[1].matches("\\d+")) {									
-								inventory.payoutDispense(horseNumer,wonHorseNumber, betAmount);
+								if(strArray[1].matches("\\d+")) {	
+									Integer betAmount = Integer.parseInt(strArray[1]);
+									inventory.payoutDispense(horseNumer,wonHorseNumber, betAmount);
 								} else {								
-									errorMessage(INVALID_BET,DENOMINATION_UNIT+betAmount.toString());
+									errorMessage(INVALID_BET,DENOMINATION_UNIT+strArray[1]);
 								}
 							} else {
 								errorMessage(INVALID_HORSE_NUMBER, horseNumer.toString());
@@ -95,6 +95,6 @@ public class HorseRacing {
 
 	public void errorMessage(String message, String input) {
 
-		System.out.println(message +":"+input);
+		System.out.println(message+input);
 	}
 }

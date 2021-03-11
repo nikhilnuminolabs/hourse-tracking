@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 import com.hourse.tracking.model.Denomination;
 import com.hourse.tracking.model.Horse;
 
+/**
+ * Represent the Inventory of Horse and Denomination
+ */
 public class Inventory {
 
 	private Map<Denomination,Integer> denominationInventory;

@@ -1,5 +1,9 @@
 package com.hourse.tracking.constant;
 
+
+/**
+ * class for all the constant
+ */
 public class Constant {
 	
 	public static final Integer MAXSTOCK = 10;

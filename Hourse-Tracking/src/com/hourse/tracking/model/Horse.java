@@ -1,5 +1,8 @@
 package com.hourse.tracking.model;
 
+/**
+ * Represent the Single Horse object
+ */
 public class Horse {
 
 	private String name ;

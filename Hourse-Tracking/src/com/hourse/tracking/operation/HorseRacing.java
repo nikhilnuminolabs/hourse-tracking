@@ -4,6 +4,9 @@ import static com.hourse.tracking.constant.Constant.*;
 import com.hourse.tracking.Inventory.Inventory;
 import com.hourse.tracking.exception.InvalidCommandException;
 
+/**
+ * Represent the Class for Horse racing contains all the function related to the horse racing operation
+ */
 public class HorseRacing {
 
 	private Integer wonHorseNumber = DEFAULT_WON_HORSE_NUMBER;

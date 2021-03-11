@@ -2,6 +2,9 @@ package com.hourse.tracking.model;
 
 import static com.hourse.tracking.constant.Constant.*;
 
+/**
+ * Represent the Single Denomination object
+ */
 public class Denomination implements Comparable<Denomination> {
 	
 	private Integer value;
